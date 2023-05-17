@@ -2,6 +2,7 @@ import React from 'react';
 
 import { FieldExtensionSDK } from '@contentful/app-sdk';
 import { Flex, IconButton, Menu } from '@contentful/f36-components';
+import { CodeIllustrationIcon, LockTrimmedIcon } from '@contentful/f36-icons';
 import { MoreHorizontalIcon } from '@contentful/f36-icons';
 import tokens from '@contentful/f36-tokens';
 import { BLOCKS, INLINES, MARKS } from '@contentful/rich-text-types';
@@ -30,7 +31,9 @@ import { useSdkContext } from '../SdkProvider';
 import { EmbedEntityWidget } from './components/EmbedEntityWidget';
 
 type ToolbarProps = {
-  isDisabled?: boolean;
+  isDisabled?: boolean,
+  isShowingJson?: boolean,
+  onJsonShowClick: any
 };
 
 const styles = {
@@ -68,6 +71,11 @@ const styles = {
     msFlexWrap: 'wrap',
     flexWrap: 'wrap',
     marginRight: '20px',
+  }),
+  lockIconWrapper: css({
+    marginLeft: 'auto',
+    marginTop: '0.5rem',
+    cursor: 'pointer',
   }),
 };
 
@@ -109,7 +117,7 @@ const Dropdown = ({ sdk, isDisabled }: { sdk: FieldExtensionSDK; isDisabled?: bo
   );
 };
 
-const Toolbar = ({ isDisabled }: ToolbarProps) => {
+const Toolbar = ({ isDisabled, isShowingJson, onJsonShowClick }: ToolbarProps) => {
   const sdk = useSdkContext();
   const editor = useContentfulEditor();
   const canInsertBlocks = !isNodeTypeSelected(editor, BLOCKS.TABLE);
@@ -130,6 +138,10 @@ const Toolbar = ({ isDisabled }: ToolbarProps) => {
     isMarkEnabled(sdk.field, MARKS.SUBSCRIPT) ||
     isMarkEnabled(sdk.field, MARKS.CODE);
   const shouldShowDropdown = boldItalicUnderlineAvailable && dropdownItemsAvailable;
+
+  const handleJsonEditorToggle = () => {
+    onJsonShowClick(!isShowingJson);
+  };
 
   return (
     <Flex testId="toolbar" className={styles.toolbar} alignItems="center">
@@ -177,6 +189,10 @@ const Toolbar = ({ isDisabled }: ToolbarProps) => {
         {isNodeTypeEnabled(sdk.field, BLOCKS.TABLE) && (
           <ToolbarTableButton isDisabled={shouldDisableTables} />
         )}
+
+        <div className={styles.lockIconWrapper} onClick={handleJsonEditorToggle}>
+          {isShowingJson ? <LockTrimmedIcon /> : <CodeIllustrationIcon />}
+        </div>
       </div>
       <div className={styles.embedActionsWrapper}>
         <EmbedEntityWidget isDisabled={isDisabled} canInsertBlocks={canInsertBlocks} />

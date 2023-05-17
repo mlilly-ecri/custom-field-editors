@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, } from 'react';
 import ReactJson from 'react-json-view';
 
 import { FieldExtensionSDK } from '@contentful/app-sdk';
@@ -50,8 +50,30 @@ export const ConnectedRichTextEditor = (props: ConnectedProps) => {
     onSkip: () => setPendingExternalUpdate(false),
   });
 
-  const state = {
-    showJsonEditor: true,
+  // const state = {
+  //   showJsonEditor: false,
+  // };
+
+  const [toggleJsonEditor, setToggleJsonEditor] = useState(false);
+
+  const handleShowJsonRequest = (shouldShow) => {
+    // useState({ showJsonEditor: shouldShow });
+    //state.showJsonEditor = shouldShow;
+
+    //state.showJsonEditor = shouldShow;
+
+    setToggleJsonEditor(true);
+
+    if (toggleJsonEditor) {
+      setToggleJsonEditor(false);
+    }
+
+    console.log('handleShowJsonRequest');
+    console.log(`shouldShow: ${shouldShow}`);
+    console.log(`toggleJsonEditor: ${toggleJsonEditor}`);
+    //console.log(`State: ${state.showJsonEditor}`);
+
+    //let shouldShow = true;
   };
 
   useEffect(() => {
@@ -98,28 +120,36 @@ export const ConnectedRichTextEditor = (props: ConnectedProps) => {
   return (
     <SdkProvider sdk={props.sdk}>
       <ContentfulEditorIdProvider value={id}>
+        {/* <div>toggleJsonEditor: {toggleJsonEditor}</div> */}
         <div className={styles.root} data-test-id="rich-text-editor">
-          <Plate
-            id={id}
-            plugins={plugins}
-            disableCorePlugins={disableCorePlugins}
-            editableProps={{
-              className: classNames,
-              readOnly: props.isDisabled,
-            }}
-            onChange={onValueChanged}
-            firstChildren={
-              !props.isToolbarHidden && (
-                <StickyToolbarWrapper isDisabled={props.isDisabled}>
-                  <Toolbar isDisabled={props.isDisabled} />
-                </StickyToolbarWrapper>
-              )
-            }
-          />
-          {state.showJsonEditor ? (
+          {toggleJsonEditor ? (
+            <StickyToolbarWrapper isDisabled={props.isDisabled}>
+              <Toolbar
+                isDisabled={props.isDisabled}
+                onJsonShowClick={handleShowJsonRequest} />
+            </StickyToolbarWrapper>) : ('')}
+          {toggleJsonEditor ? (
             <ReactJson src={props.value as any} theme="monokai" />
           ) : (
-            <ReactJson src={props.value as any} theme="monokai" />
+            <Plate
+              id={id}
+              plugins={plugins}
+              disableCorePlugins={disableCorePlugins}
+              editableProps={{
+                className: classNames,
+                readOnly: props.isDisabled,
+              }}
+              onChange={onValueChanged}
+              firstChildren={
+                !props.isToolbarHidden && (
+                  <StickyToolbarWrapper isDisabled={props.isDisabled}>
+                    <Toolbar
+                      isDisabled={props.isDisabled}
+                      onJsonShowClick={handleShowJsonRequest} />
+                  </StickyToolbarWrapper>
+                )
+              }
+            />
           )}
         </div>
       </ContentfulEditorIdProvider>
