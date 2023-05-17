@@ -1,4 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
+import ReactJson from 'react-json-view';
 
 import { FieldExtensionSDK } from '@contentful/app-sdk';
 import { EntityProvider } from '@contentful/field-editor-reference';
@@ -48,6 +49,10 @@ export const ConnectedRichTextEditor = (props: ConnectedProps) => {
     skip: pendingExternalUpdate || isFirstRender,
     onSkip: () => setPendingExternalUpdate(false),
   });
+
+  const state = {
+    showJsonEditor: true,
+  };
 
   useEffect(() => {
     /*
@@ -111,6 +116,11 @@ export const ConnectedRichTextEditor = (props: ConnectedProps) => {
               )
             }
           />
+          {state.showJsonEditor ? (
+            <ReactJson src={props.value as any} theme="monokai" />
+          ) : (
+            <ReactJson src={props.value as any} theme="monokai" />
+          )}
         </div>
       </ContentfulEditorIdProvider>
     </SdkProvider>
