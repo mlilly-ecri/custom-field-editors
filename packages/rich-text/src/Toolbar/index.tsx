@@ -140,6 +140,8 @@ const Toolbar = ({ isDisabled, isShowingJson, onJsonShowClick }: ToolbarProps) =
   const shouldShowDropdown = boldItalicUnderlineAvailable && dropdownItemsAvailable;
 
   const handleJsonEditorToggle = () => {
+
+    console.log(`isShowingJson ${isShowingJson}`);
     onJsonShowClick(!isShowingJson);
   };
 

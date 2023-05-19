@@ -50,17 +50,9 @@ export const ConnectedRichTextEditor = (props: ConnectedProps) => {
     onSkip: () => setPendingExternalUpdate(false),
   });
 
-  // const state = {
-  //   showJsonEditor: false,
-  // };
-
   const [toggleJsonEditor, setToggleJsonEditor] = useState(false);
 
   const handleShowJsonRequest = (shouldShow) => {
-    // useState({ showJsonEditor: shouldShow });
-    //state.showJsonEditor = shouldShow;
-
-    //state.showJsonEditor = shouldShow;
 
     setToggleJsonEditor(true);
 
@@ -68,12 +60,9 @@ export const ConnectedRichTextEditor = (props: ConnectedProps) => {
       setToggleJsonEditor(false);
     }
 
-    console.log('handleShowJsonRequest');
-    console.log(`shouldShow: ${shouldShow}`);
-    console.log(`toggleJsonEditor: ${toggleJsonEditor}`);
-    //console.log(`State: ${state.showJsonEditor}`);
-
-    //let shouldShow = true;
+    //console.log('handleShowJsonRequest');
+    console.log(`DEPRECIATED shouldShow: ${shouldShow}`);
+    //console.log(`toggleJsonEditor: ${toggleJsonEditor}`);
   };
 
   useEffect(() => {
@@ -120,7 +109,6 @@ export const ConnectedRichTextEditor = (props: ConnectedProps) => {
   return (
     <SdkProvider sdk={props.sdk}>
       <ContentfulEditorIdProvider value={id}>
-        {/* <div>toggleJsonEditor: {toggleJsonEditor}</div> */}
         <div className={styles.root} data-test-id="rich-text-editor">
           {toggleJsonEditor ? (
             <StickyToolbarWrapper isDisabled={props.isDisabled}>
